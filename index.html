@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos con Mouse</title>
+    <!-- Agregar enlaces a los estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 20px;
+        }
+
+        /* Agregamos esta regla de estilo para cambiar la visibilidad */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn btn-primary" onclick="showMessage('Click')">Click</button>
+    <button class="btn btn-success" onmouseover="showMessage('Mouse Over')">Mouse Over</button>
+    <button class="btn btn-info" onmouseout="showMessage('Mouse Out')">Mouse Out</button>
+    <button class="btn btn-warning" onmousedown="showMessage('Mouse Down')">Mouse Down</button>
+    <button class="btn btn-danger" onmouseup="showMessage('Mouse Up')">Mouse Up</button>
+    <button class="btn btn-secondary" onmousemove="showMessage('Mouse Move')">Mouse Move</button>
+    <button class="btn btn-dark" ondblclick="showMessage('Double Click')">Double Click</button>
+
+    <!-- Cambié la clase del botón a btn-outline-secondary y agregué la clase hidden -->
+    <button class="btn btn-outline-secondary" onclick="toggleElements()">Ocultar/Revelar Elementos</button>
+
+    <div id="message"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    function showMessage(message) {
+        document.getElementById('message').innerHTML = message;
+    }
+
+    function toggleElements() {
+        const buttons = document.querySelectorAll('.btn');
+        const hidden = buttons[0].classList.contains('hidden');
+
+        buttons.forEach((button, index) => {
+            if (index !== buttons.length - 1) {
+                // Ocultar o revelar solo los botones de acción
+                button.classList.toggle('hidden');
+            }
+        });
+
+        // Cambiar el texto del botón dependiendo del estado actual
+        const buttonText = hidden ? 'Ocultar Elementos' : 'Revelar Elementos';
+        document.querySelector('.btn-outline-secondary').innerHTML = buttonText;
+
+        // Mostrar el mensaje de scroll solo cuando los elementos están ocultos
+        if (hidden) {
+            window.addEventListener('wheel', scrollHandler);
+        } else {
+            window.removeEventListener('wheel', scrollHandler);
+        }
+    }
+
+    function scrollHandler(event) {
+        const hidden = document.querySelector('.btn-primary').classList.contains('hidden');
+        
+        if (hidden && event.deltaY < 0) {
+            showMessage('Scroll Up');
+        } else {
+            showMessage('');
+        }
+    }
+</script>
+
+</body>
+</html>
